@@ -1,6 +1,6 @@
 # Bookshelf API
 
-A small Flask API for managing a catalogue of books. It ships with a Dockerfile, a Gunicorn startup command and a pytest test suite.
+A small Flask API for managing a catalogue of books (title and author). It ships with a Dockerfile, a Gunicorn startup command and a pytest test suite.
 
 ## Setup
 
