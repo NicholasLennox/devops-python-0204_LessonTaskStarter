@@ -1,0 +1,34 @@
+name: CI
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  checks: write
+  pull-requests: write
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build -t books-api .
+
+      - name: Run tests inside container
+        run: |
+          mkdir -p test-results
+          docker run \
+            -e ENVIRONMENT=${{ secrets.ENVIRONMENT }} \
+            -v $(pwd)/test-results:/app/test-results \
+            books-api python -m pytest --junitxml=test-results/results.xml
+
+      - name: Publish test results
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        if: always()
+        with:
+          files: test-results/results.xml
